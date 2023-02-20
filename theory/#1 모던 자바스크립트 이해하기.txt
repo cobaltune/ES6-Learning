@@ -1,0 +1,30 @@
+
+#1.1 모던 자바스크립트란?
+
+에크마스크립트 (ECMA Script)
+: Javascript Specification (자바스크립트 표준 명세서)로,
+자바스크립트라는 프로그래밍 언어의 표준
+
+모던 자바스크립트 (Modern Javascript)
+: 현시점에 사용하기 적합한 범위 내에서 최신 버전의 표준을 준수하는 자바스크립트
+
+
+#1.3 ECMAScript 더 알아보기
+
+JavaScript vs ECMAScript
+
+차이점 1)
+JavaScript (= 프로그래밍 언어) vs ECMAScript (= 프로그래밍 언어의 표준)
+
+ECMAScript는 JavaScript가 갖추어야 할 내용을 정리해둔 설명서이고,
+JavaScript는 ECMAScript를 준수해서 만들어낸 결과물이라고 생각
+
++) 참고로 ECMAScript가 JavaScript화 하기 위해 등장하긴 했지만,
+   ECMAScript는 JavaScript 뿐만 아니라 모든 스크립트 언어(scripting languages)가 지켜야 하는 표준
+
+
+차이점 2)
+JavaScript는 ECMAScript를 기반으로 하지만 ECMAScript에 정의된 내용뿐만 아니라, 다른 부가적인 기능도 있음
+
++) 특히, 우리가 자바스크립트로 HTML 코드를 제어하기 위해 사용하는 DOM(Document Object Model)을 다루는 문법들은 ECMAScript에 표준화된 문법이 아니라 WebIDL
+에서 표준화된 기술
