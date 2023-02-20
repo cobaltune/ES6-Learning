@@ -1,0 +1,41 @@
+
+#2.1 데이터 타입의 특징과 종류
+
+특징
+Javascript는 다른 프로그래밍 언어에 비해서 데이터 타입이 상대적으로 유연하다(= 상황에 따라 변할 수 있다)
+
+
+종류
+
+> 기본형 (Primitive Type)
+  - Number
+  - String
+  - Boolean
+  - Null
+  - Undefined
+  - (ES 2015) Symbol : 유일한 값을 만들 때
+  - (ES 2020) BigInt : 엄청 큰 숫자를 다룰 때
+
+> 참조형 (Reference Type)
+  - Object
+
+
+#2.5 불린인 듯 불린 아닌 불린같은 값
+
+Javascript에서는 if, for, while문의 조건 부분처럼
+불린 타입의 값이 필요한 맥락에서는 불린이 아닌 다른 타입의 값들도
+불린 타입으로 형 변환되어 평가되는 특징이 있음
+
+
+> Falsy 값 (False로 평가되는 값)
+  - false
+  - null
+  - undefined
+  - NaN
+  - 0
+  - ‘’
+
+> Truthy 값 (True로 평가되는 값)
+  - 나머지 값들
+  - [ ] : 빈 배열
+  - { } : 빈 객체
