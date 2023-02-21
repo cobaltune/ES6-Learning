@@ -151,3 +151,20 @@ OR 연산자(||)는 왼쪽의 값이 falsy인지를 확인하기 때문에
 
 로그인관련 세션 등의 로직에 사용예시
 [https://www.codeit.kr/community/threads/35553](https://www.codeit.kr/community/threads/35553)
+
+
+#2.11 변수와 스코프
+
+let과 const
+  1. 변수 이름 중복 선언 불가 (SyntaxError 발생)
+  2. 변수 선언 전에 사용 불가 (ReferenceError 발생)
+  3. 블록 스코프
+
+
+변수의 유효범위(= 스코프, Scope)의 차이
+  - var x; (함수 스코프, function scope)
+  - let y; (블록 스코프, block scope)
+  - const z;  (블록 스코프, block scope)
+
+- var : 변수의 스코프가 함수 단위로만 구분
+- let, const : 어떤 문법에 해당하는 특별한 키워드 없이 단순히 코드 블록으로만 구분되어 있어도 모두 스코프를 구분
