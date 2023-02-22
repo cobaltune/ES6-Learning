@@ -378,7 +378,7 @@ arguments 객체에 아쉬운 부분
       console.log (`우승: ${first}`);
       console.log (`준우승: ${second}`);
       
-      for (cost arg of others) {
+      for (const arg of others) {
         console.log (`참가자: ${arg}`);
       }
     }
