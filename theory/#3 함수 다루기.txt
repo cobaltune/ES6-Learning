@@ -1,0 +1,285 @@
+
+#3.1 함수를 만드는 방법
+
+1. 함수 선언 (function declaration)
+
+  function 함수 이름 (파라미터) {
+  동작
+  return  // 함수가 호출된 자리에 되돌려 줄 값이 필요할 때
+  }
+
+
+2. 함수 표현식 (function expression)
+: 함수 선언을 값처럼 활용하여 변수에 할당하는 방식
+
+  // ex) 1
+  const printCodeit = function () {
+    console.log('Codeit');
+  };
+
+  printCodeit();
+
+
+  // ex) 2
+  const myBtn = document.querySelector('#myBtn');
+
+  myBtn.addEventListener('click', function () {
+    console.log('button is clicked!');
+  });
+
++) 변수에 할당하는 것이 포인트가 아니라, 함수 선언을 값처럼 사용하는 방식이라는 점
+
+함수 선언과 함수 표현식의 차이점
+함수 선언 방식은 선언하기 전에 호출할 수 있음
+ㄴ 선언문이 위로 끌어 올려지는 현상 = 호이스팅 (hoisting)
+
+
+#3.3 이름이 있는 함수 표현식
+
+Named Function Expression (기명 함수 표현식)
+: 함수 표현식으로 함수를 만들 때, 선언하는 함수에 이름을 붙여주는 이름이 있는 함수 표현식 (= 기명 함수 표현식)
+
+함수 표현식으로 함수가 할당된 변수에는 자동으로 name이라는 프로퍼티를 가지게 됨
+
+  const sayHi = function () {
+    console.log('Hi');
+  };
+
+  console.log(sayHi.name); // sayHi
+
+
+이름이 없는 함수를 변수에 할당할 때는 변수의 name 프로퍼티는 변수 이름 그 자체를 문자열로 가지게 됨
+하지만 함수에 이름을 붙여주게 되면, name 속성은 함수 이름을 문자열로 갖게 됨
+
+  const sayHi = function printHiInConsole() {
+    console.log('Hi');
+  };
+
+  console.log(sayHi.name); // printHiInConsole
+
+
+이 함수 이름은 함수 내부에서 함수 자체를 가리킬 때 사용할 수 있고,
+함수를 외부에서 함수를 호출할 때 사용할 수는 없음
+
+  const sayHi = function printHiInConsole() {
+    console.log('Hi');
+  };
+
+  printHiInConsole(); // ReferenceError
+
+
+기명 함수 표현식은 일반적으로 함수 내부에서 함수 자체를 가리킬 때 사용
+
+  let countdown = function(n) {
+    console.log(n);
+
+    if (n === 0) {
+      console.log('End!');
+    } else {
+      countdown(n - 1);
+    }
+  };
+
+  countdown(5);
+
+argument로 숫자 값을 전달하고, 전달받은 그 값이 0이 될 때까지 하나씩 값을 줄이면서
+자기 자신을 호출하는 `countdown`이라는 함수를 함수 표현식으로 작성
+
+이런 식으로 자기 자신을 부르는 함수를 재귀 함수(Recursive function)라고 부름
+
+
+그런데 만약 이 함수를 복사하려고 다른 변수에 똑같이 담았다가, `countdown` 변수에 담긴 값이 변하게 되면 문제가 발생
+
+  let countdown = function(n) {
+    console.log(n);
+    if (n === 0) {
+      console.log('End!');
+    } else {
+      countdown(n - 1);
+    }
+  };
+
+  let myFunction = countdown;
+
+  countdown = null;
+
+  myFunction(5); // TypeError
+
+  /* 코드 해석 
+  마지막 줄에서 myFunction 함수를 호출했을 때, 함수가 실행되긴 하지만,
+  6번줄 동작을 수행할 때 호출하려는 countdown 함수가
+  이미 12번에서 null 값으로 변경되었기 때문에 함수가 아니라는 TypeError가 발생 */
+
+
+이런 상황을 방지하기 위해서 함수 내부에서 함수 자신을 사용하려고 하면 함수표현식에서는 반드시 기명 함수 표현식을 사용
+
+  let countdown = function printCountdown(n) {
+    console.log(n);
+    if (n === 0) {
+      console.log('End!');
+    } else {
+      printCountdown(n - 1);
+    }
+  };
+
+  let myFunction = countdown;
+
+  countdown = null;
+
+  myFunction(5); // 정상적으로 동작
+
+
+#3.4 즉시 실행 함수 (IIFE)
+
+즉시 실행 함수 (Immediately Invoked Function Expression, IIFE)
+: 함수가 선언된 순간에 바로 실행, 함수 선언 부분을 소괄호로 감싼 다음에 바로 뒤에
+
+함수를 실행하는 소괄호를 한 번 더 붙여주는 방식
+
+  (function () {
+    console.log('Hi!');
+  })();
+
+
+일반 함수처럼 파라미터를 작성하고, 함수를 호출할 때 argument를 전달할 수도 있음
+
+  (function (x, y) {
+    console.log(x + y);
+  })(3, 5);
+
+
+*즉시 실행 함수는 함수에 이름을 지어주더라도 외부에서 재사용할 수 없음
+
+  (function sayHi() {
+    console.log('Hi!');
+  })();
+
+  sayHi(); // ReferenceError
+
+
+그래서 일반적으로는 이름이 없는 익명 함수를 사용
+
+  (function countdown(n) {
+    console.log(n);
+    if (n === 0) {
+      console.log('End!');
+    } else {
+      countdown(n - 1);
+    }
+  })(5);
+
+
++) 다만, 이름이 있는 함수 표현식에서도 살펴봤던 것처럼 함수 내부에서 자기 자신을 호출하는 재귀적인 구조를 만들고자 할 땐
+   이름이 필요할 수도 있으니까 이 부분은 참고
+
+
+즉시 실행 함수의 활용
+
+1. 말 그대로 선언과 동시에 실행이 이뤄지기 때문에 일반적으로 프로그램 **초기화 기능**
+에 많이 활용
+
+  (function init() {
+    // 프로그램이 실행 될 때 기본적으로 동작할 코드들..
+  })();
+
+
+2. 재사용이 필요 없는, 일회성 동작을 구성할 때 활용
+
+  const firstName = Young;
+  const lastName = Kang;
+
+  const greetingMessage = (function () {
+    const fullName = `${firstName} ${lastName} `;
+
+    return `Hi! My name is ${fullName}`;
+  })();
+
+⇒ 함수의 리턴 값을 바로 변수에 할당하고 싶을 때 활용
+
+
+#3.5 값으로서 함수
+
+Javascript는 함수를 특별한 종류의 값으로 취급
+- type of 연산자로 console.log 하면 function으로 나오지만
+- 함수의 구체적인 데이터 타입은 객체, console.dir로 찍어보면 객체 타입의 값으로 평가됨
+
+
+이런 특징을 활용한 방식
+
+1. 함수 표현식으로 함수를 선언하고 호출할 수 있고
+2. 객체 안의 메소드로 사용될 수도 있고
+(객체 안에 프로퍼티로 함수를 선언하고, 프로퍼티에 접근해서 함수를 호출)
+3. (흔하지는 않지만) 배열에 담아서 함수를 호출도 가능
+
+
+이뿐만 아니라 값으로 평가되는 이 함수는 다른 함수의 파라미터로도 전달할 수 있음
+
+1. DOM 이벤트를 다룰 때 파라미터를 전달하는 부분에서 함수를 선언하는 것뿐만 아니라
+
+  const myBtn = document.querySelector('#myBtn');
+
+  myBtn.addEventListener('click', function () {
+    console.log('button is clicked');
+  });
+
+
+2. 이런 식으로 함수를 호출할 때 미리 선언된 함수를 전달하면서 조건에 따라 그 함수가 나중에 호출되거나 혹은 호출되지 않는 동작을 구현할 수도 있음
+
+  function makeQuiz (quiz, answer, success, fail) {
+    if (prompt(quiz) === answer) {
+      console.log(succeess());
+    } else {
+      console.log(fail());
+    }
+  };
+
+  function getSuccess() {
+    return '정답!';
+  };
+
+  function getFail() {
+    return '오답!';
+  };
+
+  const question = '5 + 3 = ?';
+
+  makeQuiz(question, '8', getSuccess, getFail);
+
+⇒ 다른 함수의 파라미터에 전달된 함수를 콜백 함수(Callback Function)라고 부름 (여기서는 getSuccess, getFail)
+
+
++) 함수가 하나의 값으로 취급되는 특성은 어떤 함수의 리턴 값이 함수가 될 수 있다는 뜻
+
+  function getPrintHi() {
+    return function () {
+      console.log ('Hi?');
+    };
+  };
+
+  const sayHi = getPrintHi();
+
+  sayHi();
+
+  /* 코드 해석
+  getPrintHi 라는 함수가 또다시 함수를 리턴하는 모습 그러면 8번 줄에서는
+  getPrintHi를 호출했을 때, 리턴 값이 되는 함수가 sayHi라는 변수에 할당됨
+  그래서 sayHi()를 호출하면 콘솔에는 'Hi?'가 출력 */
+
+⇒ getPrintHi와 같이 함수를 리턴하는 함수를 고차 함수(Higher Order Function)라고 부름
+  : 고차 함수는 변수에 호출된 값을 할당해서 활용하기도 하지만,
+    특별한 경우에는 이렇게 이중 괄호를 사용해서 고차 함수로 리턴되는 함수를 바로 호출할 수도 있음
+
+    function getPrintHi() {
+      return function () {
+        console.log ('Hi?');
+      };
+    };
+
+    getPrintHi()();
+
+
+∴ Javascript에서 함수는 변수나 다른 데이터 구조 안에 할당될 수 있고, 다른 함수의 파라미터로 전달될 수도 있고, 다른 함수의 리턴 값이 될 수도 있음
+
+
++) 참고로 프로그래밍에서 이런 특징을 가진 함수를 일급 함수(First Class Function)이라고 함
+   그래서 JS는 일급 함수를 가진 프로그래밍언어라고 할 수 있음
