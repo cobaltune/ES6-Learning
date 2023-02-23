@@ -388,3 +388,163 @@ arguments 객체에 아쉬운 부분
 ∴ 이 rest parameter가 가지는 장점이 상대적으로 더 크기 때문에
   코드를 작성할 때 가급적이면 rest parameter를 우선적으로 활용하고,
   불가피한 상황에서 arguments 객체를 활용하는 게 많은 스타일가이드에서 권장하는 방법
+
+
+#3.13 Arrow Function
+
+Arrow Function
+: 기존의 함수 선언 방식을 보다 간결하게 만들어 주는 문법으로,
+  이름이 없는 익명 함수이기 때문에 일반적으로 어떤 이름을 가진 변수에 할당하거나
+  혹은 다른 함수의 argument를 선언할 때 주로 활용됨
+
+  // before 1)
+  const getTwice = function(number) {
+    return number * 2;
+  };
+
+  console.log(getTwice(5));
+
+  const myBtn = document.querySelector('#myBtn');
+
+  myBtn.addEventListener('click', function () {
+    console.log('button is clicked!');
+  });
+
+
+  // after 1)
+  const getTwice = (number) => {
+    return number * 2;
+  };
+
+  console.log(getTwice(5));
+
+  const myBtn = document.querySelector('#myBtn');
+
+  myBtn.addEventListener('click', () => {
+    console.log('button is clicked!');
+  });
+
+
+
+  // before 2)
+  const getTwice = function(number) {
+    return number * 2;
+  };
+
+  function getTwice (number){
+    return number * 2;
+  };
+
+
+  // after 2)
+  const getTwice = number => number * 2;
+
+  console.log(getTwice(6));
+
+
+모든 Arrow function들이 이렇게 간결하게 작성될 수는 없고, 특정한 상황에서 좀 더 간결하게 표현한 규칙들이 있음
+
+  // Arrow function의 일반적인 모양
+  const getTwice = (number) => {
+    return number * 2;
+  };
+
+  console.log(getTwice(3));
+
+
+파라미터가 하나인 Arrow function은 파라미터를 감싸는 소괄호 부분을 생략할 수 있음
+
+  const getTwice = number => {
+    return number * 2;
+  };
+
+  console.log(getTwice(3));
+
+*몇몇 스타일 가이드에서는 가독성의 문제로 파라미터가 하나라도 소괄호를 생략하지 말고 이 부분이 파라미터라는 것을 명확하게 알려주는 것이 좋다는 의견도 있음
+
+
++) 파라미터가 두 개 이상 있거나, 없을 경우에는 소괄호를 반드시 작성해야 함
+
+  const sum = (a, b) => {
+    return a + b;
+  };
+
+  const getCodeit = () => {
+    return { name: 'Codeit', };
+  };
+
+  console.log(sum(10, 5));
+  console.log(getCodeit());
+
+
+내부의 동작 부분이 return문 하나로만 이루어져 있다면 중괄호와 함께 return 키워드도 생략할 수 있음
+
+  const getTwice = number => number * 2;
+
+  console.log(getTwice(3));
+
+
+but 함수 내부에서 조건문이나, 반복문 아니면 이렇게 변수의 값을 할당하는 것과 같이
+return문 외에 다른 표현들이 더 필요하다면 중괄호와 return 키워드는 생략할 수 없으니까 주의해야 함
+
+  const sum = (a, b) => {
+    const result = a + b;
+    return result;
+  };
+
+  const getCodeit = () => {
+    return { name: 'Codeit', };
+  };
+
+  console.log(sum(10, 5));
+  console.log(getCodeit());
+
+
++) 함수 내부에 동작이 이렇게 return문 하나밖에 없긴 하지만 retun값이 객체인 경우, 중괄호와 return 키워드를 생략하게 되면 에러가 발생함
+   : 객체라고 작성했던 중괄호를 함수의 동작 부분을 구분하는 중괄호로 해석하기 때문
+  
+  // error
+  const sum = (a, b) => {
+    const result = a + b;
+    return result;
+  };
+
+  const getCodeit = () => { name: 'Codeit', };
+  };
+
+  console.log(sum(10, 5));
+  console.log(getCodeit());
+
+
+  // solution
+  const sum = (a, b) => {
+    const result = a + b;
+    return result;
+  };
+
+  const getCodeit = () => ({ name: 'Codeit', });
+  };
+
+  console.log(sum(10, 5));
+  console.log(getCodeit());
+
+
+우리가 기존에 function 키워드로 사용하던 대부분의 함수는 Arrow function을 통해 좀 더 간결한 코드로 대체 가능하지만,
+Arrow function에는 arguments 객체가 없다는 점을 주의
+
+  function nomalFunc () {
+    console.log(arguments);
+  };
+
+  const arrowFunc = () => {
+    console.log(arguments);
+  };
+
+  nomalFunc(1, 2, 3);
+  arrowFunc(1, 2, 3);
+
+  // 출력값
+  Arguments(3) [1, 2 ,3]
+  ReferenceError: arguments is not defined
+
+⇒ 만약 arguments 객체를 사용하는 함수라면 Arrow function으로 대체하기는 어렵다는 점 참고
