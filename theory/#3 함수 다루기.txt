@@ -548,3 +548,133 @@ Arrow function에는 arguments 객체가 없다는 점을 주의
   ReferenceError: arguments is not defined
 
 ⇒ 만약 arguments 객체를 사용하는 함수라면 Arrow function으로 대체하기는 어렵다는 점 참고
+
+
+#3.15 What is this?
+
+this
+- 콘솔에 this를 출력해 보면 window 객체가 출력됨 (= 브라우저 안에서 javascript가 동작한다면 전역 객체인 window 객체가 this의 기본값)
+- 일반적으로 사용되지 않고, 주로 함수 내부에서 사용
+특히 객체의 메소드를 만들 때 중요한 역할을 함
+
+  const user = {
+    firstName: 'Tess',
+    lastName: 'Jang',
+    getFullName: function() {
+      return `${user.firstName} ${user.lastName}`;
+    },
+  };
+
+  console.log(user.getFullName());
+
+  /* 코드 해석
+  user 객체에 firstName과 lastName 프로퍼티를 만들고
+  getFullName 메소드에서는 이 user 객체의 각 프로퍼티를 합쳐서
+  새로운 문자열을 return */
+
+
++) 이 메소드를 다른 객체에도 적용하고 싶을 때
+
+  function getFullName() {
+    return `${user.firstName} ${user.lastName}`;
+  }
+
+  const user = {
+    firstName: 'Tess',
+    lastName: 'Jang',
+    getFullName: getFullName,
+  };
+
+  const admin = {
+    firstName: 'Alex',
+    lastName: 'Kim',
+    getFullName: getFullName,
+  };
+
+  console.log(user.getFullName());
+  console.log(admin.getFullName());
+
+  // 출력값
+  Tess Jang
+  Tess Jang
+
+
+이렇게 함수 외부로 분리하게 되면 문제가 발생함
+: getFullName의 동작 부분에서는 계속해서 user객체만 바라보기 때문에 admin객체에서 getFullName 메소드를 호출하더라도 결과적으로는 user객체의 프로퍼티를 사용하게 되는 것과 같기 때문
+
+⇒ 이런 상황에서 this라는 키워드를 활용
+
+  function getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  const user = {
+    firstName: 'Tess',
+    lastName: 'Jang',
+    getFullName: getFullName,
+  };
+
+  const admin = {
+    firstName: 'Alex',
+    lastName: 'Kim',
+    getFullName: getFullName,
+  };
+
+  console.log(user.getFullName());
+  console.log(admin.getFullName());
+
+  // 출력값
+  Tess Jang
+  Alex Kim
+
+: javascript에서 this는 함수를 호출한 객체를 가리키는 키워드라는 점,
+  그래서 코드를 작성할 때 값이 미리 결정되는 게 아니라
+  함수가 호출될 때 어떤 객체가 그 함수를 호출했는지에 따라 상대적으로 값이 변하게 된다는 특징을 가짐
+
+
+*일반 함수와 Arrow Function의 가장 중요한 차이
+: this를 다루는 방식이 서로 다름
+
+  console.log(this);
+
+  // Arrow Function
+  const printThis = () => {
+    console.log(this);
+  };
+
+  const myObj = {
+    content: 'myObj',
+    printThis: printThis,
+  };
+
+  const otherObj = {
+    content: 'otherObj',
+    printThis: printThis,
+  };
+
+  myObj.printThis();
+  otherObj.printThis();
+
+  // 출력값
+  window {...}
+  window {...}
+  window {...}
+
+: Arrow Function에서 this값은 일반 함수처럼 호출한 대상에 따라 상대적으로 변하는 게 아니라,
+  Arrow Function이 선언되기 직전에 그 때 유효한 this값과 똑같은 값을 가지고 동작 (이 코드에서는 Arrow Function이 선언되기 직전의 this는 window객체)
+
+⇒ 이러한 특징때문에 특별히 객체에 메소드를 만들 때는 Arrow Function보다는 일반 함수를 좀 더 권장된다는 점 참고
+
+
+∴ 외부에서 여러 객체에 공통적으로 사용되는 메소드를 만들 때뿐만 아니라(위 코드),
+  그냥 객체 내부에서 메소드를 만들 때도 메소드가 속해있는 객체의 프로퍼티가 필요한 상황에서도 충분히 활용 가능
+
+  const user = {
+    firstName: 'Tess',
+    lastName: 'Jang',
+    getFullName: function () {
+      return `${this.firstName} ${this.lastName}`;
+    },
+  };
+
+  console.log(user.getFullName());
