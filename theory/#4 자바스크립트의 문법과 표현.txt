@@ -947,3 +947,62 @@ members라는 파라미터에 argument로 배열이 전달되는 걸 의도해�
 실행 가능한 코드에서 발생한 에러를 다루는 과정을 가리켜서 예외 처리 (Exception Handling)
 
 +) Syntax Error는 코드를 아예 실행조차 하지 않음
+
+
+#4.20 finally문
+
+에러를 다루는 방법 중
+
+2. try catch + finally
+
+  try {
+    // 실행할 코드
+  } catch (err) {
+    // 에러가 발생했을 때 실행할 코드
+  } finally {
+    // 항상 실행할 코드
+  }
+
+: finally문은 try catch문이 끝난 다음에 최종적으로 실행될 코드를 다룰 때 활용
+  try문에서 에러가 발생하지 않으면 try문의 코드가 모두 실행된 다음에,
+  try문에서 에러가 발생하면 catch문의 코드가 모두 실행된 다음 실행할 코드를 finally문에 작성
+
+  (= try문에서 어떤 코드를 실행할 때 에러 여부와 상관없이 항상 실행할 코드를 작성)
+
+
+  function printMembers(...members) {
+    for (const member of members) {
+      console.log(member);
+    }
+  }
+
+  try {
+    printMembers('영훈', '윤수', '동욱');
+  } catch (err) {
+    alert('에러가 발생했습니다!');
+    console.error(err);
+  } finally {
+    const end = new Date();
+    const msg = `코드 실행을 완료한 시각은 ${end.toLocaleString()}입니다.`;
+    console.log(msg);
+  }
+
+⇒ 위 코드처럼 에러 유무와 관계없이 코드 실행 시각을 알고 싶을 때 활용
+
+
+finally문에서의 에러 처리
+
+참고로 finally문에서 에러가 발생할 경우에는 다시 그 위에 있는 catch문으로 넘어가지 않음
+만약 finally문에서도 에러 처리가 필요한 경우, 아래처럼 try catch문을 중첩해서 활용
+
+  try {
+    try {
+      // 실행할 코드
+    } catch (err) {
+      // 에러가 발생했을 때 실행할 코드
+    } finally {
+      // 항상 실행할 코드
+    }
+  } catch (err) {
+    // finall문에서 에러가 발생했을 때 실행할 코드
+  }
